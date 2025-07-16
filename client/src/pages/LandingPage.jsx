@@ -1,11 +1,11 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Navigation } from '@/components/Navigation';
+// import { Navigation } from '@/components/Navigation';
 import { Hero } from '@/components/landing/Hero';
 import { Features } from '@/components/landing/Features';
 import { HowItWorks } from '@/components/landing/HowItWorks';
 import { JoinUs } from '@/components/landing/JoinUs';
-import { Footer } from '@/components/Footer';
+// import { Footer } from '@/components/Footer';
 
 // Animation variants for page sections
 const pageVariants = {
@@ -28,12 +28,12 @@ export default function LandingPage() {
       animate="animate"
       variants={pageVariants}
     >
-      <Navigation />
+      {/*<Navigation />*/}
       <Hero />
       <Features />
       <HowItWorks />
       <JoinUs />
-      <Footer />
+      {/*<Footer />*/}
     </motion.div>
   );
 }

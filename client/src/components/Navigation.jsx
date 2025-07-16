@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { BarChart3, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export const Navigation = () => {
+export default Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 

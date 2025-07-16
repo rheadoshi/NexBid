@@ -1,8 +1,7 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 import { BarChart3 } from 'lucide-react';
 
-export const Footer = () => {
+const Footer = () => {
   // Use your username from the requirement
   const username = "rheadoshi";
   
@@ -135,3 +134,5 @@ export const Footer = () => {
     </footer>
   );
 };
+
+export default Footer;

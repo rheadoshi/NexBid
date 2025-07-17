@@ -48,21 +48,24 @@ const login = async (req, res) => {
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Invalid password' });
     }
+    
     // Generate JWT token
-    const token = generateAuthToken();
+    const token = generateAuthToken(user._id);
+    
     // Return user data and token
     return res.status(200).json({
       user: {
         id: user._id,
         username: user.username,
         email: user.email,
+        role: user.role
       },
-        token, })
-    }
-    catch (error) {
-      console.error('Error logging in user:', error);
-      return res.status(500).json({ message: 'Internal server error' });
-    }
+      token
+    });
+  } catch (error) {
+    console.error('Error logging in user:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
 }
 
 module.exports = {

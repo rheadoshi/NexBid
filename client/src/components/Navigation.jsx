@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BarChart3, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-export default Navigation = () => {
+const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const navLinks = [
     { href: "#features", label: "Features" },
     { href: "#how-it-works", label: "How It Works" },
+    { to: "/ads", label: "Browse Ads" },
   ];
 
   // Handle scroll effect
@@ -72,18 +74,31 @@ export default Navigation = () => {
 
           <div className="hidden md:flex items-center space-x-8">
             {navLinks.map((link, index) => (
-              <motion.a
-                key={link.href}
-                href={link.href}
-                className="text-gray-700 hover:text-orange-500 transition-colors"
+              <motion.div
+                key={link.href || link.to}
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                whileHover={{ scale: 1.1, color: "#f97316" }}
+                whileHover={{ scale: 1.1 }}
               >
-                {link.label}
-              </motion.a>
+                {link.to ? (
+                  <Link
+                    to={link.to}
+                    className="text-gray-700 hover:text-orange-500 transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ) : (
+                  <a
+                    href={link.href}
+                    className="text-gray-700 hover:text-orange-500 transition-colors"
+                  >
+                    {link.label}
+                  </a>
+                )}
+              </motion.div>
             ))}
+            
             <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -91,11 +106,25 @@ export default Navigation = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <a href="#join-us">
-                <Button className="bg-orange-500 hover:bg-orange-600 text-white">
-                  Join Us
+              <Link to="/login">
+                <Button variant="outline" className="mr-2">
+                  Login
                 </Button>
-              </a>
+              </Link>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5 }}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <Link to="/register">
+                <Button className="bg-orange-500 hover:bg-orange-600 text-white">
+                  Get Started
+                </Button>
+              </Link>
 
             </motion.div>
           </div>
@@ -123,21 +152,43 @@ export default Navigation = () => {
             >
               <div className="flex flex-col space-y-4">
                 {navLinks.map((link) => (
-                  <motion.a
-                    key={link.href}
-                    href={link.href}
-                    className="text-gray-700 hover:text-orange-500 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
+                  <motion.div
+                    key={link.href || link.to}
                     variants={itemVariants}
                     whileHover={{ scale: 1.05, x: 5 }}
                   >
-                    {link.label}
-                  </motion.a>
+                    {link.to ? (
+                      <Link
+                        to={link.to}
+                        className="text-gray-700 hover:text-orange-500 transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.href}
+                        className="text-gray-700 hover:text-orange-500 transition-colors"
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {link.label}
+                      </a>
+                    )}
+                  </motion.div>
                 ))}
                 <motion.div variants={itemVariants}>
-                  <Button className="bg-orange-500 hover:bg-orange-600 text-white w-full">
-                    Start Bidding
-                  </Button>
+                  <Link to="/login">
+                    <Button variant="outline" className="w-full mb-2">
+                      Login
+                    </Button>
+                  </Link>
+                </motion.div>
+                <motion.div variants={itemVariants}>
+                  <Link to="/register">
+                    <Button className="bg-orange-500 hover:bg-orange-600 text-white w-full">
+                      Get Started
+                    </Button>
+                  </Link>
                 </motion.div>
               </div>
             </motion.div>
@@ -147,3 +198,5 @@ export default Navigation = () => {
     </motion.nav>
   );
 };
+
+export default Navigation;

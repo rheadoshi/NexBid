@@ -19,19 +19,19 @@ const Login = () => {
 
     try {
       const res = await api.post('/api/auth/login', formData);
-      const data = await res.json();
+      const data = res.data;
 
-      if (!res.ok) {
-        setError(data.msg || 'Login failed');
-      } else {
-        localStorage.setItem('token', data.token);
-        setSuccess('Login successful!');
-        console.log(res.data);
-        navigate('/dashboard')
-        // optionally: window.location.href = '/dashboard';
-      }
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('user', JSON.stringify(data.user));
+      setSuccess('Login successful!');
+      navigate('/dashboard');
     } catch (err) {
-      setError('Something went wrong');
+      if (err.response) {
+        setError(err.response.data.message || 'Login failed');
+      } else {
+        setError('Something went wrong');
+      }
+      console.error(err);
     }
   };
 

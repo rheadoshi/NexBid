@@ -19,10 +19,25 @@ const storage = multer.diskStorage({
   }
 });
 
-// File filter - only allow images
+// File filter - only allow images with enhanced security
 const fileFilter = (req, file, cb) => {
+  // Check MIME type
   if (file.mimetype.startsWith('image/')) {
-    cb(null, true);
+    // Additional security: check file extension
+    const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+    const fileExtension = path.extname(file.originalname).toLowerCase();
+    
+    if (allowedExtensions.includes(fileExtension)) {
+      // Sanitize filename to prevent path traversal
+      const sanitizedName = path.basename(file.originalname);
+      if (sanitizedName === file.originalname) {
+        cb(null, true);
+      } else {
+        cb(new Error('Invalid filename detected!'), false);
+      }
+    } else {
+      cb(new Error('Only image files (jpg, jpeg, png, gif, webp) are allowed!'), false);
+    }
   } else {
     cb(new Error('Only image files are allowed!'), false);
   }

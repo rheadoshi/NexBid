@@ -7,9 +7,33 @@ const { generateAuthToken } = require('../services/auth');
 const register = async (req, res) => {
   const { username, email, password, role = 'user' } = req.body;
 
-  // Basic validation
+  // Enhanced validation
   if (!username || !email || !password) {
     return res.status(400).json({ message: 'Username, email, and password are required' });
+  }
+
+  // Validate username
+  if (username.length < 3 || username.length > 30) {
+    return res.status(400).json({ message: 'Username must be between 3 and 30 characters' });
+  }
+
+  // Validate email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(email)) {
+    return res.status(400).json({ message: 'Please provide a valid email address' });
+  }
+
+  // Validate password strength
+  if (password.length < 6) {
+    return res.status(400).json({ message: 'Password must be at least 6 characters long' });
+  }
+
+  // Check for strong password
+  const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/;
+  if (!strongPassword.test(password)) {
+    return res.status(400).json({ 
+      message: 'Password must contain at least one uppercase letter, one lowercase letter, and one number' 
+    });
   }
 
   try {
@@ -18,12 +42,14 @@ const register = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: 'User with this email or username already exists' });
     }
+    
     // Hash the password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 12); // Increased salt rounds
+    
     // Create new user
     const user = await User.create({
-      username,
-      email,
+      username: username.trim(),
+      email: email.toLowerCase().trim(),
       password: hashedPassword,
       role,
     });

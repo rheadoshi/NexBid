@@ -46,27 +46,30 @@ const Dashboard = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
+      setLoading(true);
       await api.delete(`/api/ads/${adId}`);
-
       setAds(ads.filter(ad => ad._id !== adId));
+      setError(''); // Clear any existing errors
     } catch (err) {
       console.error('Failed to delete advertisement:', err);
-      alert('Failed to delete advertisement');
+      const errorMessage = err.response?.data?.error || 'Failed to delete advertisement';
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
   const updateAdStatus = async (adId, newStatus) => {
     try {
-      const token = localStorage.getItem('token');
       await api.put(`/api/ads/${adId}`, { status: newStatus });
-
       setAds(ads.map(ad => 
         ad._id === adId ? { ...ad, status: newStatus } : ad
       ));
+      setError(''); // Clear any existing errors
     } catch (err) {
       console.error('Failed to update advertisement status:', err);
-      alert('Failed to update advertisement status');
+      const errorMessage = err.response?.data?.error || 'Failed to update advertisement status';
+      setError(errorMessage);
     }
   };
 

@@ -11,19 +11,22 @@ import Navigation from './components/Navigation';
 import AppNavigation from './components/AppNavigation';
 import Footer from './components/Footer';
 import ProtectedRoute from './components/ProtectedRoute';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const Layout = () => {
   const location = useLocation();
   const isLandingPage = location.pathname === '/';
   
   return (
-    <div className="flex flex-col min-h-screen">
-      {isLandingPage ? <Navigation /> : <AppNavigation />}
-      <main className="flex-1">
-        <Outlet />
-      </main>
-      <Footer />
-    </div>
+    <ErrorBoundary>
+      <div className="flex flex-col min-h-screen">
+        {isLandingPage ? <Navigation /> : <AppNavigation />}
+        <main className="flex-1">
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
+    </ErrorBoundary>
   );
 };
 

@@ -16,10 +16,44 @@ const Register = () => {
     setFormData({...formData, [e.target.name]: e.target.value});
   };
 
+  const validateForm = () => {
+    // Username validation
+    if (formData.username.length < 3 || formData.username.length > 30) {
+      setError('Username must be between 3 and 30 characters');
+      return false;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+      setError('Please provide a valid email address');
+      return false;
+    }
+
+    // Password validation
+    if (formData.password.length < 6) {
+      setError('Password must be at least 6 characters long');
+      return false;
+    }
+
+    const strongPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).*$/;
+    if (!strongPassword.test(formData.password)) {
+      setError('Password must contain at least one uppercase letter, one lowercase letter, and one number');
+      return false;
+    }
+
+    return true;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
+
+    // Client-side validation
+    if (!validateForm()) {
+      return;
+    }
 
     try {
       const res = await api.post('/api/auth/register', formData);
@@ -27,6 +61,14 @@ const Register = () => {
       console.log(data);
 
       setSuccess('Registration successful! You can now login.');
+      
+      // Clear form on success
+      setFormData({
+        username: '',
+        email: '',
+        password: '',
+        role: 'user'
+      });
     } catch (err) {
       if (err.response) {
         // Server responded with error status
